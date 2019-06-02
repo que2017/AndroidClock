@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">AndroidClock</string>
+    <string name="time">Time</string>
+    <string name="alarm">Alarm</string>
+    <string name="timer">Timer</string>
+    <string name="stopwatch">Stopwatch</string>
 </resources>

@@ -22,9 +22,9 @@ public class MainActivity extends Activity {
 
         mTabHost = findViewById(android.R.id.tabhost);
         mTabHost.setup();
-        mTabHost.addTab(mTabHost.newTabSpec("tabTime").setIndicator("时钟").setContent(R.id.tabTime));
-        mTabHost.addTab(mTabHost.newTabSpec("tabAlarm").setIndicator("闹钟").setContent(R.id.tabAlarm));
-        mTabHost.addTab(mTabHost.newTabSpec("tabTimer").setIndicator("计时器").setContent(R.id.tabTimer));
-        mTabHost.addTab(mTabHost.newTabSpec("tabStopWatch").setIndicator("秒表").setContent(R.id.tabStopWatch));
+        mTabHost.addTab(mTabHost.newTabSpec("tabTime").setIndicator(getResources().getString(R.string.time)).setContent(R.id.tabTime));
+        mTabHost.addTab(mTabHost.newTabSpec("tabAlarm").setIndicator(getResources().getString(R.string.alarm)).setContent(R.id.tabAlarm));
+        mTabHost.addTab(mTabHost.newTabSpec("tabTimer").setIndicator(getResources().getString(R.string.timer)).setContent(R.id.tabTimer));
+        mTabHost.addTab(mTabHost.newTabSpec("tabStopWatch").setIndicator(getResources().getString(R.string.stopwatch)).setContent(R.id.tabStopWatch));
     }
 }

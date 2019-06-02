@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">时钟程序</string>
+    <string name="time">时钟</string>
+    <string name="alarm">闹钟</string>
+    <string name="timer">计时器</string>
+    <string name="stopwatch">秒表</string>
+</resources>

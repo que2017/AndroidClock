@@ -3,8 +3,10 @@ package com.duiyi.androidclock.views;
 import android.annotation.SuppressLint;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -27,6 +29,8 @@ public class AlarmView extends LinearLayout {
     private static final String TAG = AlarmView.class.getSimpleName();
 
     private static final int ONE_DAY_MILLIS = 24 * 60 * 60 * 1000;
+
+    private static final String KEY_ALARM_LIST = "alarm_list";
 
     private ListView mAlarmListView;
 
@@ -55,6 +59,7 @@ public class AlarmView extends LinearLayout {
 
         mAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1);
         mAlarmListView.setAdapter(mAdapter);
+        readSavedAlarmLsit();
 
         mAddAlarm.setOnClickListener(new OnClickListener() {
             @Override
@@ -86,6 +91,34 @@ public class AlarmView extends LinearLayout {
     }
 
     private void saveAlarmList() {
+        SharedPreferences.Editor editor = getContext().getSharedPreferences(AlarmView.class.getName(), Context.MODE_PRIVATE).edit();
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < mAdapter.getCount(); i++) {
+            AlarmData alarmData = mAdapter.getItem(i);
+            if (alarmData != null) {
+                sb.append(alarmData.getTime()).append(",");
+            }
+        }
+        String content = sb.toString().substring(0, sb.length() - 1);
+        Log.i(TAG, "alarm list content: " + content);
+        editor.putString(KEY_ALARM_LIST, content);
+        editor.apply();
+    }
+
+    private void readSavedAlarmLsit() {
+        mAdapter.clear();
+        SharedPreferences sp  = getContext().getSharedPreferences(AlarmView.class.getName(), Context.MODE_PRIVATE);
+        String content = sp.getString(KEY_ALARM_LIST, null);
+        if (content != null) {
+            String[] timeStrings = content.split(",");
+            for (String string : timeStrings) {
+                try {
+                    mAdapter.add(new AlarmData(Long.parseLong(string)));
+                } catch (NumberFormatException e) {
+                    Log.e(TAG, "time string is wrong");
+                }
+            }
+        }
     }
 
     private static class AlarmData {

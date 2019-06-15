@@ -39,13 +39,25 @@
 
                 </com.duiyi.androidclock.views.TimeView>
 
-                <LinearLayout
+                <com.duiyi.androidclock.views.AlarmView
                     android:id="@+id/tabAlarm"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
-                </LinearLayout>
+                    <ListView
+                        android:id="@+id/alarmList"
+                        android:layout_width="match_parent"
+                        android:layout_weight="1"
+                        android:layout_height="0dp"></ListView>
+
+                    <Button
+                        android:id="@+id/addAlarm"
+                        android:text="@string/add_alarm"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                </com.duiyi.androidclock.views.AlarmView>
 
                 <LinearLayout
                     android:id="@+id/tabTimer"

@@ -5,4 +5,5 @@
     <string name="alarm">闹钟</string>
     <string name="timer">计时器</string>
     <string name="stopwatch">秒表</string>
+    <string name="add_alarm">添加闹钟</string>
 </resources>

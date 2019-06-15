@@ -17,7 +17,7 @@ import com.duiyi.androidclock.R;
 import java.util.Calendar;
 
 /**
- * 时钟界面的布局
+ * 时钟视图类
  *
  * @author zhang
  * @since 2019/6/2

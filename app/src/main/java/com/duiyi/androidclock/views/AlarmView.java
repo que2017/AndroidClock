@@ -1,13 +1,19 @@
 package com.duiyi.androidclock.views;
 
 import android.annotation.SuppressLint;
+import android.app.AlarmManager;
+import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -15,6 +21,7 @@ import android.widget.ListView;
 import android.widget.TimePicker;
 
 import com.duiyi.androidclock.R;
+import com.duiyi.androidclock.receiver.AlarmReceiver;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -30,6 +37,8 @@ public class AlarmView extends LinearLayout {
 
     private static final int ONE_DAY_MILLIS = 24 * 60 * 60 * 1000;
 
+    private static final int FIVE_MINUS = 5 * 60 * 1000;
+
     private static final String KEY_ALARM_LIST = "alarm_list";
 
     private ListView mAlarmListView;
@@ -38,16 +47,25 @@ public class AlarmView extends LinearLayout {
 
     private ArrayAdapter<AlarmData> mAdapter;
 
+    private AlarmManager mAlarmManger;
+
     public AlarmView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        init();
     }
 
     public AlarmView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        init();
     }
 
     public AlarmView(Context context) {
         super(context);
+        init();
+    }
+
+    private void init() {
+        mAlarmManger = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
     }
 
     @Override
@@ -67,6 +85,31 @@ public class AlarmView extends LinearLayout {
                 addAlarm();
             }
         });
+
+        mAlarmListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+                new AlertDialog.Builder(getContext()).setTitle(R.string.delete_clock)
+                    .setItems(new CharSequence[]{getContext().getResources().getString(R.string.delete)},
+                        new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                deleteAlarm(position);
+                                break;
+                            default:
+                                Log.i(TAG, "which number error: " + which);
+                        }
+                    }
+                }).setNegativeButton(R.string.cancel, null).show();
+            }
+        });
+    }
+
+    private void deleteAlarm(int position) {
+        mAdapter.remove(mAdapter.getItem(position));
+        saveAlarmList();
     }
 
     private void addAlarm() {
@@ -85,6 +128,8 @@ public class AlarmView extends LinearLayout {
                 }
 
                 mAdapter.add(new AlarmData(cale.getTimeInMillis()));
+                mAlarmManger.setRepeating(AlarmManager.RTC_WAKEUP, cale.getTimeInMillis(), FIVE_MINUS,
+                    PendingIntent.getBroadcast(getContext(), 0, new Intent(getContext(), AlarmReceiver.class), 0));
                 saveAlarmList();
             }
         }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true).show();

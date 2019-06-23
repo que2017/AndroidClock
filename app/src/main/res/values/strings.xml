@@ -5,4 +5,7 @@
     <string name="timer">Timer</string>
     <string name="stopwatch">Stopwatch</string>
     <string name="add_alarm">Add alarm</string>
+    <string name="delete_clock">Delete this clock?</string>
+    <string name="delete">Delete</string>
+    <string name="cancel">cancel</string>
 </resources>
